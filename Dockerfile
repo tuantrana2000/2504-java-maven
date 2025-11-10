@@ -1,5 +1,5 @@
 # Base image: JDK 21 để chạy ứng dụng Java
-FROM openjdk:21
+FROM eclipse-temurin:21-jre
 
 # Copy file JAR đã build sẵn từ Maven (sẽ nằm trong /target)
 COPY target/*.jar app.jar
