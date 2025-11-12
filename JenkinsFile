@@ -14,6 +14,7 @@ pipeline{
             steps{
                 git 'https://github.com/nguyentduc89/2504-java-maven.git'
                 script {
+                    withCredentials([usernamePassword(credentialsId: 'git-cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]){
                     sh '''
                         sed -i "s#image: .*#image: ducnt65/2504-repo:${IMG_TAG}#" deployment.yaml
                         git config --global user.email "nguyentduc89@gmail.com"
@@ -22,6 +23,7 @@ pipeline{
                         git commit -m "update tag to ${IMG_TAG}"
                         git push --set-upstream origin master
                        ''' 
+                    }
                 }
             }
         }
