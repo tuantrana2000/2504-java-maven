@@ -13,7 +13,16 @@ pipeline{
         stage("Checkout") {
             steps{
                 git 'https://github.com/nguyentduc89/2504-java-maven.git'
+                script {
+                    sh '''
+                        cd 2504-java-maven
+                        sed -i "s#image: .*$#image: ducnt65/2504-repo:${IMG_TAG}#" deployment.yaml
+                        git add .
+                        git commit -m "update tag to ${IMG_TAG}"
+                        git push origin main
+                       ''' 
                 }
+            }
         }
         stage("Buld code to jar"){
             steps {
