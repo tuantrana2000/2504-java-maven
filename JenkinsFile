@@ -22,7 +22,7 @@ pipeline{
                         git add deployment.yaml
                         git commit -m "update tag to ${IMG_TAG}"
                         git remote set-url origin https://${GIT_USER}:${GIT_TOKEN}@github.com/nguyentduc89/2504-java-maven.git
-                        git push --set-upstream origin master
+                        git push  origin HEAD:master
                        ''' 
                     }
                 }
