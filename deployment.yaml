@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app-2504
+  namespace: app-2504
 spec:
   replicas: 1
     selector:
