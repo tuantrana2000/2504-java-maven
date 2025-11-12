@@ -20,7 +20,7 @@ pipeline{
                         git config --global user.name "Trung Duc"
                         git add .
                         git commit -m "update tag to ${IMG_TAG}"
-                        git push
+                        git push --set-upstream origin master
                        ''' 
                 }
             }
