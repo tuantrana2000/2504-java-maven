@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-2504
+  namespace: app-2504
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-2504
+  template:
+    metadata:
+      labels:
+        app: app-2504
+    spec:
+      containers:
+      - name: app-2504
+        image: ducnt65/2504-repo:tag-56
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: 2504-registry-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-2504-svc
+spec:
+  ports:
+  - port: 30001
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: app-2504-svc
+  type: ClusterIP
