@@ -14,7 +14,7 @@ pipeline{
             steps{
                 git 'https://github.com/tuantrana2000/2504-java-maven.git'
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'git-cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]){
+                    withCredentials([usernamePassword(credentialsId: 'git-tuantran', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]){
                     sh '''
                         sed -i "s#image: .*#image: tuantrana2000/2504-tuantran-repo:${IMG_TAG}#" deployment.yaml
                         git config --global user.email "tts2020.minhtuan.20850030@gmail.com"
