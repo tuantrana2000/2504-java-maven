@@ -5,14 +5,14 @@ pipeline{
         jdk "jdk21"
     }
     environment {
-      IMAGE_NAME='ducnt65/2504-repo'
+      IMAGE_NAME='tuantrana2000/2504-tuantran-repo'
       IMG_TAG="tag-${env.BUILD_NUMBER}"
     }
     
     stages {
         stage("Checkout") {
             steps{
-                git 'https://github.com/nguyentduc89/2504-java-maven.git'
+                git 'https://github.com/tuantrana2000/2504-java-maven.git'
                 script {
                     withCredentials([usernamePassword(credentialsId: 'git-cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]){
                     sh '''
@@ -39,7 +39,7 @@ pipeline{
             steps {
                 script {
                     def img = docker.build("${IMAGE_NAME}:${IMG_TAG}")
-                    docker.withRegistry("", "dockerhub-ducnt65"){
+                    docker.withRegistry("", "dockerhub-tuantran"){
                         img.push()
                     }
                 }
