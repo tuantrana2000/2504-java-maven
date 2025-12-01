@@ -18,6 +18,7 @@ spec:
         image: tuantrana2000/2504-tuantran-repo:tag-49
         ports:
         - containerPort: 8080
+      # Registry docker that create on k8 Cluster
       imagePullSecrets:
       - name: 2504-tuantran-registry-secret
 ---
