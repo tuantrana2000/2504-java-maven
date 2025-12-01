@@ -18,8 +18,8 @@ spec:
         image: tuantrana2000/2504-tuantran-repo:tag-49
         ports:
         - containerPort: 8080
-      # imagePullSecrets:
-      # - name: 2504-registry-secret
+      imagePullSecrets:
+      - name: 2504-tuantran-registry-secret
 ---
 apiVersion: v1
 kind: Service
