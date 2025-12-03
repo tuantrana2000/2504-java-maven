@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: app-2504
-        image: tuantrana2000/2504-tuantran-repo:tag-18
+        image: tuantrana2000/2504-tuantran-repo:tag-20
         ports:
         - containerPort: 8080
       imagePullSecrets:
