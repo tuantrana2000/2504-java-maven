@@ -19,8 +19,8 @@ spec:
         ports:
         - containerPort: 8080
       # Registry docker that create on k8 Cluster
-      imagePullSecrets:
-      - name: 2504-tuantran-registry-secret
+      # imagePullSecrets:
+      # - name: 2504-tuantran-registry-secret
 ---
 apiVersion: v1
 kind: Service
