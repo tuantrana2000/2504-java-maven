@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: app-2504
-        image: tuantrana2000/2504-tuantran-repo:tag-36
+        image: tuantrana2000/2504-tuantran-repo:tag-37
         ports:
         - containerPort: 8080
       # Registry docker that create on k8 Cluster
