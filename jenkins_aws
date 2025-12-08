@@ -1,0 +1,78 @@
+pipeline{
+    agent any
+    tools {
+        maven "Maven3"
+        jdk "jdk21"
+    }
+    environment {
+        AWS_REGION='ap-southeast-1'
+        AWS_ACCOUNT_ID='164693826317'
+        IMAGE_REPO_NAME='2504-tuantran-ecs'
+        // Construct the full repository URI
+        REPOSITORY_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
+        AWS_IMAGE_NAME='2504-tuantran-ecs'
+        // ID of the AWS credentials stored in Jenkins
+        AWS_CREDENTIALS_ID='awsecr-tuantran'
+        // ID of the GIT credentials stored in Jenkins
+        GIT_CREDENTIALS_ID='git-tuantran'
+        IMG_TAG="tag-${env.BUILD_NUMBER}"
+    }
+    
+    stages {
+        stage("Checkout") {
+            steps{
+                git 'https://github.com/tuantrana2000/2504-java-maven.git'
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'git-tuantran', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]){
+                                                
+                    sh '''
+                        sed -i "s#image: .*#image: tuantrana2000/2504-tuantran-repo:${IMG_TAG}#" deployment.yaml
+                        git config --global user.email "tts2020.minhtuan.20850030@gmail.com"
+                        git config --global user.name "Tuan Tran"
+                        git add deployment.yaml
+                        git commit -m "update tag to ${IMG_TAG}"
+                        git remote set-url origin https://${GIT_USER}:${GIT_TOKEN}@github.com/tuantrana2000/2504-java-maven.git
+                        git push  origin HEAD:master
+                       ''' 
+                    }
+                }
+            }
+        }
+        stage("Buld code to jar"){
+            steps {
+                sh 'java -version'
+                sh 'mvn -version'
+                sh 'mvn clean package -DskipTests'
+            }
+        }
+        stage('Login to ECR') {
+            steps {
+                // Use AWS CLI to get a login password and pipe it to docker login
+                withAWS(credentials: "${AWS_CREDENTIALS_ID}", region: "${AWS_REGION}") {
+                    sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+                }
+            }
+        }
+        stage('Docker Build Image') {
+            steps {
+                script {
+                    sh "docker build -t ${AWS_IMAGE_NAME}:${IMG_TAG} ."
+                }
+            }
+        }
+        stage('Docker Tag Image') {
+            steps {
+                script {
+                    sh "docker tag ${AWS_IMAGE_NAME}:${IMG_TAG} ${REPOSITORY_URI}:${IMG_TAG}"
+                }
+            }
+        }
+        stage('Push Image to ECR') {
+            steps {
+                script {
+                    sh "docker push ${REPOSITORY_URI}:${IMG_TAG}"
+                }
+            }
+        }
+    }
+}
